@@ -42,6 +42,8 @@ const rawFileDir = path.join(__dirname, "__raw_files__");
     } catch (err) {
       console.log(chalk.red("failure"), "Actual create-react-app");
       console.log(err);
+      console.log(err.toString());
+      console.log(err.output.toString());
       process.exit(1);
     }
   })();
