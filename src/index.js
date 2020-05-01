@@ -14,18 +14,13 @@ const gitWrapper = require("simple-git/promise");
 const ncp = nodeUtil.promisify(require("ncp"));
 
 const argv = process.argv.slice(2);
-console.log("proc");
-console.log(process);
-console.log("proc argv");
-console.log(process.argv);
-console.log("argv");
-console.log(argv);
 
 if (argv.length !== 1) {
-  console.warn("Usage: npx @jman.me/create-react-app [project_path]");
+  console.log("Usage: npx @jman.me/create-react-app [project_path]");
   console.log(process.argv);
   process.exit(1);
 }
+
 const projectDir = path.join(argv[0]);
 const srcDir = path.join(projectDir, "src");
 const rawFileDir = path.join(__dirname, "__raw_files__");
@@ -34,7 +29,9 @@ const rawFileDir = path.join(__dirname, "__raw_files__");
   // Delete old directory, testing...
   (() => {
     console.log(chalk.red("removing"), "Deleting old directory...");
-    rimraf.sync(projectDir);
+    if (fs.existsSync(projectDir)) {
+      rimraf.sync(projectDir);
+    }
   })();
 
   // Actual create-react-app
