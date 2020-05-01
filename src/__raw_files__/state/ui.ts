@@ -1,6 +1,6 @@
 import { action, computed, observable } from "mobx";
 import { createContext } from "react";
-import packageJson from "../../package.json";
+import packageJson from "src/../package.json";
 
 class UIStore {
   private _appName = packageJson.name;
