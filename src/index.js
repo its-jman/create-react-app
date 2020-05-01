@@ -37,7 +37,13 @@ const rawFileDir = path.join(__dirname, "__raw_files__");
   // Actual create-react-app
   (() => {
     console.log(chalk.green("running"), "Actual create-react-app...");
-    execSync(`npx create-react-app --typescript ${projectDir}`, {});
+    try {
+      execSync(`npx create-react-app --typescript ${projectDir}`, {});
+    } catch (err) {
+      console.log(chalk.red("failure"), "Actual create-react-app");
+      console.log(err);
+      process.exit(1);
+    }
   })();
 
   // Update package.json
