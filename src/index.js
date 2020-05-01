@@ -90,6 +90,12 @@ styled-components @types/styled-components \
 react-helmet @types/react-helmet`,
       { cwd: projectDir }
     );
+
+    execSync(
+      `yarn add -D\
+prettier`,
+      { cwd: projectDir }
+    );
   })();
 
   // Remove /src contents
