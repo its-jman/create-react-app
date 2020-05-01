@@ -14,6 +14,12 @@ const gitWrapper = require("simple-git/promise");
 const ncp = nodeUtil.promisify(require("ncp"));
 
 const argv = process.argv.slice(2);
+console.log("proc");
+console.log(process);
+console.log("proc argv");
+console.log(process.argv);
+console.log("argv");
+console.log(argv);
 
 if (argv.length !== 1) {
   console.warn("Usage: npx @jman.me/create-react-app [project_path]");
