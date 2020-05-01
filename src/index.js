@@ -9,10 +9,9 @@ const spawnSync = require("child_process").spawnSync;
 const execSync = require("child_process").execSync;
 const rimraf = require("rimraf");
 const chalk = require("chalk");
+const process = require("process");
 const gitWrapper = require("simple-git/promise");
 const ncp = nodeUtil.promisify(require("ncp"));
-
-const nodeCommand = `~/.nvm/alias/default`;
 
 const argv = process.argv.slice(2);
 
