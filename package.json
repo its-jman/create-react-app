@@ -6,7 +6,7 @@
   "bin": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\"",
-    "publish": "np"
+    "publish": "np --no-yarn"
   },
   "author": "",
   "license": "ISC",
