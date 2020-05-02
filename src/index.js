@@ -74,6 +74,7 @@ const rawFileDir = path.join(__dirname, "__raw_files__");
 
     tsconfigJson.compilerOptions.experimentalDecorators = true;
     tsconfigJson.compilerOptions.baseUrl = ".";
+    tsconfigJson.compilerOptions.noImplicitReturns = true;
 
     fs.writeFileSync(tsconfigJsonPath, JSON.stringify(tsconfigJson, null, 2));
   })();
