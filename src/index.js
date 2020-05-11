@@ -93,7 +93,7 @@ react-helmet @types/react-helmet`,
     );
 
     execSync(
-      `yarn add -D\
+      `yarn add -D \
 prettier`,
       { cwd: projectDir }
     );
