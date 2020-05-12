@@ -37,7 +37,7 @@ const rawFileDir = path.join(__dirname, "__raw_files__");
   (() => {
     console.log(chalk.green("running"), "Actual create-react-app...");
     try {
-      execSync(`npx --ignore-existing create-react-app --typescript ${projectDir}`, {});
+      execSync(`npx --ignore-existing create-react-app --template typescript ${projectDir}`, {});
     } catch (err) {
       console.log(chalk.red("failure"), "Actual create-react-app");
       console.log(err);
