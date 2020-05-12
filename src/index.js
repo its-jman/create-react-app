@@ -26,11 +26,10 @@ const srcDir = path.join(projectDir, "src");
 const rawFileDir = path.join(__dirname, "__raw_files__");
 
 (async () => {
-  // Delete old directory, testing...
   (() => {
-    console.log(chalk.red("removing"), "Deleting old directory...");
     if (fs.existsSync(projectDir)) {
-      rimraf.sync(projectDir);
+      console.log(chalk.red("fatal"), "Directory already exists, exiting...");
+      process.exit(1);
     }
   })();
 
@@ -121,7 +120,7 @@ prettier`,
   })();
 
   await (async () => {
-    console.log(chalk.green("running"), "Syncing changes to git");
+    console.log(chalk.green("running"), "Committing changes...");
     const git = gitWrapper(projectDir);
     await git.add(".");
     await git.commit("Initialize project using @jman.me/create-react-app");
