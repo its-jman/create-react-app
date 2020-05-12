@@ -119,6 +119,14 @@ prettier`,
     // insert src/pages/[home, _home.styled]
   })();
 
+  (() => {
+    const dotenvText = `\
+EXTEND_ESLINT=true
+`;
+
+    fs.writeFileSync(path.join(projectDir, ".env"), dotenvText);
+  })();
+
   await (async () => {
     console.log(chalk.green("running"), "Committing changes...");
     const git = gitWrapper(projectDir);
