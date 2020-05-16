@@ -82,7 +82,7 @@ const rawFileDir = path.join(__dirname, "__raw_files__");
   (() => {
     console.log(chalk.green("running"), "Installing packages");
     execSync(
-      `yarn add \
+      `npm i -S \
 normalize.css \
 mobx mobx-react-lite \
 lodash.clonedeep @types/lodash.clonedeep \
@@ -92,7 +92,7 @@ react-helmet @types/react-helmet`,
     );
 
     execSync(
-      `yarn add -D \
+      `npm i -D \
 prettier`,
       { cwd: projectDir }
     );
