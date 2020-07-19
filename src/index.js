@@ -23,6 +23,7 @@ if (argv.length !== 1) {
 
 const projectDir = path.join(argv[0]);
 const srcDir = path.join(projectDir, "src");
+const publicDir = path.join(projectDir, "public");
 const rawFileDir = path.join(__dirname, "__raw_files__");
 
 (async () => {
@@ -53,7 +54,7 @@ const rawFileDir = path.join(__dirname, "__raw_files__");
     const packageJsonPath = path.join(projectDir, "package.json");
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath).toString());
 
-    packageJson.prettier = { printWidth: 110 };
+    packageJson.prettier = { printWidth: 85 };
     packageJson.version = "0.1.0";
     delete packageJson.scripts.eject;
     packageJson.eslintConfig.rules = {
@@ -100,14 +101,15 @@ prettier`,
 
   // Remove /src contents
   (() => {
-    console.log(chalk.green("running"), "removing src/*");
+    console.log(chalk.green("running"), "removing src/*, public/*");
     rimraf.sync(path.join(srcDir, "*"));
+    rimraf.sync(path.join(publicDir, "*"));
   })();
 
   await (async () => {
     console.log(chalk.green("running"), "creating project files...");
     try {
-      await ncp(rawFileDir, srcDir);
+      await ncp(rawFileDir, projectDir);
     } catch (err) {
       console.log(err);
     }

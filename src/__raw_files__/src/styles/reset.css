@@ -118,6 +118,13 @@ html {
   word-break: break-word;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: var(--grey-0);
+  height: 100vh;
+}
+
+body,
+#root {
+  height: 100%;
 }
 
 *,
@@ -195,11 +202,13 @@ ul {
 }
 
 a {
+  color: var(--blue-5);
   text-decoration: none;
 }
 
 a:hover {
   text-decoration: underline;
+  cursor: pointer;
 }
 
 th {
