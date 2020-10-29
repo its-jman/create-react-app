@@ -21,7 +21,8 @@
   },
   "devDependencies": {
     "np": "^6.2.3",
-    "prettier": "^2.0.5"
+    "prettier": "^2.0.5",
+    "string-replace-stream": "0.0.2"
   },
   "prettier": {
     "printWidth": 110

@@ -5,6 +5,10 @@ This is an opinionated generation library which is based on create-react-app. Al
 
 Decisions made:
 * Typescript
+* mobx
+* styled-components
+* tailwind.css
+* normalize.css
 * Prettier
   * printWidth: 110
 * ESLint
@@ -14,9 +18,6 @@ Decisions made:
   * experimentalDecorators: true
   * baseUrl: "."
   * noImplicitReturns: true
-* normalize.css
-* mobx
-* styled-components
 * react-helmet
 * Project structure
   * src/layout

@@ -6,6 +6,7 @@ const nodeUtil = require("util");
 const uuid = require("uuid").v4;
 const u = require("./utils");
 const spawnSync = require("child_process").spawnSync;
+const stringReplaceStream = require('string-replace-stream');
 const execSync = require("child_process").execSync;
 const rimraf = require("rimraf");
 const chalk = require("chalk");
@@ -21,7 +22,8 @@ if (argv.length !== 1) {
   process.exit(1);
 }
 
-const projectDir = path.join(argv[0]);
+const projectName = argv[0];
+const projectDir = path.join(projectName);
 const srcDir = path.join(projectDir, "src");
 const publicDir = path.join(projectDir, "public");
 const rawFileDir = path.join(__dirname, "__raw_files__");
@@ -54,15 +56,38 @@ const rawFileDir = path.join(__dirname, "__raw_files__");
     const packageJsonPath = path.join(projectDir, "package.json");
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath).toString());
 
-    packageJson.prettier = { printWidth: 85 };
-    packageJson.version = "0.1.0";
+    packageJson.scripts["build:tailwind"] = "tailwind build src/styles/tailwind.css -o src/styles/tailwind.output.css";
+    packageJson.scripts["prebuild"] = "run-s build:tailwind";
+
+    packageJson.scripts["watch:tailwind"] = "chokidar 'src/**/*.css' 'src/**/*.scss' --ignore src/styles/tailwind.output.css -c 'npm run build:tailwind'";
+    packageJson.scripts["start:react"] = "react-scripts start";
+    packageJson.scripts["start"] = "npm-run-all build:tailwind --parallel watch:tailwind start:react";
+
     delete packageJson.scripts.eject;
+
+    packageJson.prettier = { printWidth: 95 };
+    packageJson.version = "0.1.0";
     packageJson.eslintConfig.rules = {
       "jsx-a11y/anchor-is-valid": "off",
       "@typescript-eslint/no-unused-vars": "off",
     };
 
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+  })();
+
+  // Update gitignore
+  (() => {
+    console.log(chalk.green("running"), "Updating .gitignore");
+    const gitignorePath = path.join(projectDir, ".gitignore");
+    let gitignore = fs.readFileSync(gitignorePath).toString();
+
+    gitignore += `\
+
+# @jman.me/create-react-app entries
+*.output.*
+`;
+
+    fs.writeFileSync(gitignorePath, gitignore);
   })();
 
   // Update tsconfig
@@ -84,6 +109,7 @@ const rawFileDir = path.join(__dirname, "__raw_files__");
     console.log(chalk.green("running"), "Installing packages");
     execSync(
       `yarn add \
+tailwindcss npm-run-all chokidar-cli \
 normalize.css \
 mobx mobx-react-lite \
 lodash.clonedeep @types/lodash.clonedeep \
@@ -109,16 +135,16 @@ prettier`,
   await (async () => {
     console.log(chalk.green("running"), "creating project files...");
     try {
-      await ncp(rawFileDir, projectDir);
+      await ncp(rawFileDir, projectDir, {
+        transform: (read, write, file) => {
+          read
+            .pipe(stringReplaceStream("$PROJECT_NAME$", projectName))
+            .pipe(write);
+        }
+      });
     } catch (err) {
       console.log(err);
     }
-
-    // insert app.tsx, index.tsx
-    // insert src/state/[ui]
-    // insert src/styles/[base,reset]
-    // insert src/utils
-    // insert src/pages/[home, _home.styled]
   })();
 
   (() => {
