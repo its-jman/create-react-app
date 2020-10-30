@@ -6,7 +6,7 @@ const nodeUtil = require("util");
 const uuid = require("uuid").v4;
 const u = require("./utils");
 const spawnSync = require("child_process").spawnSync;
-const stringReplaceStream = require('string-replace-stream');
+const stringReplaceStream = require("string-replace-stream");
 const execSync = require("child_process").execSync;
 const rimraf = require("rimraf");
 const chalk = require("chalk");
@@ -56,12 +56,15 @@ const rawFileDir = path.join(__dirname, "__raw_files__");
     const packageJsonPath = path.join(projectDir, "package.json");
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath).toString());
 
-    packageJson.scripts["build:tailwind"] = "tailwind build src/styles/tailwind.css -o src/styles/tailwind.output.css";
-    packageJson.scripts["prebuild"] = "run-s build:tailwind";
+    packageJson.scripts["build:tailwind"] =
+      "tailwind build src/styles/tailwind.css -o src/styles/tailwind.output.css";
+    packageJson.scripts["prebuild"] = "export NODE_ENV=production; run-s build:tailwind";
 
-    packageJson.scripts["watch:tailwind"] = "chokidar 'src/**/*.css' 'src/**/*.scss' --ignore src/styles/tailwind.output.css -c 'npm run build:tailwind'";
+    packageJson.scripts["watch:tailwind"] =
+      "chokidar 'src/**/*.css' 'src/**/*.scss' --ignore src/styles/tailwind.output.css -c 'npm run build:tailwind'";
     packageJson.scripts["start:react"] = "react-scripts start";
     packageJson.scripts["start"] = "npm-run-all build:tailwind --parallel watch:tailwind start:react";
+    packageJson.scripts["build"] = "export NODE_ENV=production; react-scripts build";
 
     delete packageJson.scripts.eject;
 
@@ -70,6 +73,27 @@ const rawFileDir = path.join(__dirname, "__raw_files__");
     packageJson.eslintConfig.rules = {
       "jsx-a11y/anchor-is-valid": "off",
       "@typescript-eslint/no-unused-vars": "off",
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            {
+              name: "styled-components",
+              message: "Please import from styled-components/macro.",
+            },
+          ],
+          patterns: ["!styled-components/macro"],
+        },
+      ],
+    };
+
+    packageJson.babelMacros = {
+      styledComponents: {
+        pure: true,
+        fileName: false,
+        minify: true,
+        transpileTemplateLiterals: true,
+      },
     };
 
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
@@ -113,7 +137,7 @@ tailwindcss npm-run-all chokidar-cli \
 normalize.css \
 mobx mobx-react-lite \
 lodash.clonedeep @types/lodash.clonedeep \
-styled-components @types/styled-components \
+styled-components @types/styled-components babel-plugin-styled-components \
 react-helmet @types/react-helmet`,
       { cwd: projectDir }
     );
@@ -137,10 +161,8 @@ prettier`,
     try {
       await ncp(rawFileDir, projectDir, {
         transform: (read, write, file) => {
-          read
-            .pipe(stringReplaceStream("$PROJECT_NAME$", projectName))
-            .pipe(write);
-        }
+          read.pipe(stringReplaceStream("$PROJECT_NAME$", projectName)).pipe(write);
+        },
       });
     } catch (err) {
       console.log(err);

@@ -12,7 +12,10 @@ const greys = {
 };
 
 module.exports = {
-  purge: ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx", "public/**/*.html"],
+  purge: {
+    mode: 'layers',
+    content: ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx", "public/**/*.html"]
+  },
   theme: {
     extend: {
       colors: {
