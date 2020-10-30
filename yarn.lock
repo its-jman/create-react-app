@@ -1943,7 +1943,7 @@ split@^1.0.0:
   dependencies:
     through "2"
 
-string-replace-stream@0.0.2:
+string-replace-stream@^0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/string-replace-stream/-/string-replace-stream-0.0.2.tgz#eb75d4ec565d8dd4ca871797c92cc7643358a5bb"
   integrity sha1-63XU7FZdjdTKhxeXySzHZDNYpbs=
