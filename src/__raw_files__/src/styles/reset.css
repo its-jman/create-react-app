@@ -120,11 +120,13 @@ html {
   -moz-osx-font-smoothing: grayscale;
   background: var(--grey-0);
   height: 100vh;
+  width: 100vw;
 }
 
 body,
 #root {
   height: 100%;
+  width: 100%;
 }
 
 *,
