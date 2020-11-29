@@ -65,7 +65,7 @@ const rawFileDir = path.join(__dirname, "__raw_files__");
       build: "export NODE_ENV=production; react-scripts build",
       "watch:css": "npm run build:css -- -w",
       "start:react": "react-scripts start",
-      start: "npm-run-all build:tailwind --parallel watch:css start:react",
+      start: "npm-run-all build:css --parallel watch:css start:react",
     };
 
     packageJson.eslintConfig.rules = {
