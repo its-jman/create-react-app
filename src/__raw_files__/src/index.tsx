@@ -1,9 +1,14 @@
-import React from "react";
 import ReactDOM from "react-dom";
 import * as MobX from "mobx";
 
 import App from "src/app";
 
-MobX.configure({ enforceActions: "always" });
+MobX.configure({
+  enforceActions: "observed",
+  computedRequiresReaction: true,
+  reactionRequiresObservable: true,
+  observableRequiresReaction: true,
+  disableErrorBoundaries: true,
+});
 
 ReactDOM.render(<App />, document.getElementById("root"));

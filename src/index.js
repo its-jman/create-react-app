@@ -30,7 +30,7 @@ const rawFileDir = path.join(__dirname, "__raw_files__");
 
 (async () => {
   (() => {
-    if (fs.existsSync(projectDir)) {
+    if (fs.existsSync(projectDir) && fs.readdirSync(projectDir).length > 0) {
       console.log(chalk.red("fatal"), "Directory already exists, exiting...");
       process.exit(1);
     }
@@ -40,7 +40,7 @@ const rawFileDir = path.join(__dirname, "__raw_files__");
   (() => {
     console.log(chalk.green("running"), "Actual create-react-app...");
     try {
-      execSync(`npx --ignore-existing create-react-app --template typescript ${projectDir}`, {});
+      execSync(`npx --ignore-existing create-react-app --use-npm --template typescript ${projectDir}`, {});
     } catch (err) {
       console.log(chalk.red("failure"), "Actual create-react-app");
       console.log(err);
@@ -56,20 +56,18 @@ const rawFileDir = path.join(__dirname, "__raw_files__");
     const packageJsonPath = path.join(projectDir, "package.json");
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath).toString());
 
-    packageJson.scripts["build:tailwind"] =
-      "tailwind build src/styles/tailwind.css -o src/styles/tailwind.output.css";
-    packageJson.scripts["prebuild"] = "export NODE_ENV=production; run-s build:tailwind";
-
-    packageJson.scripts["watch:tailwind"] =
-      "chokidar 'src/**/*.css' 'src/**/*.scss' --ignore src/styles/tailwind.output.css -c 'npm run build:tailwind'";
-    packageJson.scripts["start:react"] = "react-scripts start";
-    packageJson.scripts["start"] = "npm-run-all build:tailwind --parallel watch:tailwind start:react";
-    packageJson.scripts["build"] = "export NODE_ENV=production; react-scripts build";
-
-    delete packageJson.scripts.eject;
-
-    packageJson.prettier = { printWidth: 95 };
     packageJson.version = "0.1.0";
+
+    packageJson.scripts = {
+      test: "react-scripts test",
+      "build:css": "postcss src/styles/tailwind.css -o src/styles/tailwind.output.css",
+      prebuild: "export NODE_ENV=production; run-s build:css",
+      build: "export NODE_ENV=production; react-scripts build",
+      "watch:css": "npm run build:css -- -w",
+      "start:react": "react-scripts start",
+      start: "npm-run-all build:tailwind --parallel watch:css start:react",
+    };
+
     packageJson.eslintConfig.rules = {
       "jsx-a11y/anchor-is-valid": "off",
       "@typescript-eslint/no-unused-vars": "off",
@@ -87,6 +85,7 @@ const rawFileDir = path.join(__dirname, "__raw_files__");
       ],
     };
 
+    packageJson.postcss = { plugins: { tailwindcss: {}, autoprefixer: {} } };
     packageJson.babelMacros = {
       styledComponents: {
         pure: true,
@@ -95,6 +94,8 @@ const rawFileDir = path.join(__dirname, "__raw_files__");
         transpileTemplateLiterals: true,
       },
     };
+    packageJson.prettier = { printWidth: 95 };
+
 
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
   })();
@@ -133,9 +134,9 @@ const rawFileDir = path.join(__dirname, "__raw_files__");
     console.log(chalk.green("running"), "Installing packages");
     execSync(
       `yarn add \
-tailwindcss npm-run-all chokidar-cli \
+tailwindcss postcss postcss-cli autoprefixer npm-run-all chokidar-cli \
 normalize.css \
-mobx mobx-react-lite \
+mobx@5 mobx-react-lite@2 \
 lodash.clonedeep @types/lodash.clonedeep \
 styled-components @types/styled-components babel-plugin-styled-components \
 react-helmet @types/react-helmet`,
