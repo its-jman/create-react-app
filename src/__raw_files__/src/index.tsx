@@ -8,7 +8,6 @@ MobX.configure({
   computedRequiresReaction: true,
   reactionRequiresObservable: true,
   observableRequiresReaction: true,
-  disableErrorBoundaries: true,
 });
 
 ReactDOM.render(<App />, document.getElementById("root"));
