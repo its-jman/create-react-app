@@ -159,10 +159,21 @@ prettier`,
 
   await (async () => {
     console.log(chalk.green("running"), "creating project files...");
+    const fileExtsToSkip = [
+      ".svg",
+      ".png",
+      ".jpg",
+      ".ico",
+      ".pdf",
+    ];
     try {
       await ncp(rawFileDir, projectDir, {
         transform: (read, write, file) => {
-          read.pipe(stringReplaceStream("$PROJECT_NAME$", projectName)).pipe(write);
+          let stream = read;
+          if (!fileExtsToSkip.includes(path.extname(file.name))) {
+            stream = stream.pipe(stringReplaceStream("$PROJECT_NAME$", projectName))
+          }
+          stream.pipe(write);
         },
       });
     } catch (err) {
