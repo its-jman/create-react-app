@@ -3,11 +3,6 @@ import * as MobX from "mobx";
 
 import App from "src/app";
 
-MobX.configure({
-  enforceActions: "observed",
-  computedRequiresReaction: true,
-  reactionRequiresObservable: true,
-  observableRequiresReaction: true,
-});
+MobX.configure({ enforceActions: "always" });
 
 ReactDOM.render(<App />, document.getElementById("root"));

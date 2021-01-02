@@ -96,7 +96,6 @@ const rawFileDir = path.join(__dirname, "__raw_files__");
     };
     packageJson.prettier = { printWidth: 95 };
 
-
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
   })();
 
@@ -109,6 +108,7 @@ const rawFileDir = path.join(__dirname, "__raw_files__");
     gitignore += `\
 
 # @jman.me/create-react-app entries
+.eslintcache
 *.output.*
 `;
 
@@ -133,7 +133,7 @@ const rawFileDir = path.join(__dirname, "__raw_files__");
   (() => {
     console.log(chalk.green("running"), "Installing packages");
     execSync(
-      `yarn add \
+      `npm i -S \
 tailwindcss postcss postcss-cli autoprefixer npm-run-all chokidar-cli \
 normalize.css \
 mobx@5 mobx-react-lite@2 \
@@ -144,7 +144,7 @@ react-helmet @types/react-helmet`,
     );
 
     execSync(
-      `yarn add -D \
+      `npm i -D \
 prettier`,
       { cwd: projectDir }
     );
@@ -159,19 +159,13 @@ prettier`,
 
   await (async () => {
     console.log(chalk.green("running"), "creating project files...");
-    const fileExtsToSkip = [
-      ".svg",
-      ".png",
-      ".jpg",
-      ".ico",
-      ".pdf",
-    ];
+    const fileExtsToSkip = [".svg", ".png", ".jpg", ".ico", ".pdf"];
     try {
       await ncp(rawFileDir, projectDir, {
         transform: (read, write, file) => {
           let stream = read;
           if (!fileExtsToSkip.includes(path.extname(file.name))) {
-            stream = stream.pipe(stringReplaceStream("$PROJECT_NAME$", projectName))
+            stream = stream.pipe(stringReplaceStream("$PROJECT_NAME$", projectName));
           }
           stream.pipe(write);
         },

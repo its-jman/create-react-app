@@ -10,17 +10,17 @@
   },
   "author": "",
   "dependencies": {
-    "chalk": "^4.0.0",
+    "chalk": "^4.1.0",
     "lodash.clonedeep": "^4.5.0",
     "ncp": "^2.0.0",
     "process": "^0.11.10",
     "rimraf": "^3.0.2",
-    "simple-git": "^2.2.0",
+    "simple-git": "^2.31.0",
     "string-replace-stream": "^0.0.2",
-    "uuid": "^8.0.0"
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "np": "^6.2.3"
+    "np": "^7.2.0"
   },
   "prettier": {
     "printWidth": 110
