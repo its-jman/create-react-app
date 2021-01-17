@@ -122,6 +122,7 @@ const rawFileDir = path.join(__dirname, "__raw_files__");
     const tsconfigJsonPath = path.join(projectDir, "tsconfig.json");
     const tsconfigJson = JSON.parse(fs.readFileSync(tsconfigJsonPath).toString());
 
+    tsconfigJson.compilerOptions.target = "es6";
     tsconfigJson.compilerOptions.experimentalDecorators = true;
     tsconfigJson.compilerOptions.baseUrl = ".";
     tsconfigJson.compilerOptions.noImplicitReturns = true;
@@ -136,8 +137,8 @@ const rawFileDir = path.join(__dirname, "__raw_files__");
       `npm i -S \
 tailwindcss postcss postcss-cli autoprefixer npm-run-all chokidar-cli \
 normalize.css \
+axios \
 mobx@5 mobx-react-lite@2 \
-lodash.clonedeep @types/lodash.clonedeep \
 styled-components @types/styled-components babel-plugin-styled-components \
 react-helmet @types/react-helmet`,
       { cwd: projectDir }
