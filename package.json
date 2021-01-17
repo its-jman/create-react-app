@@ -11,7 +11,6 @@
   "author": "",
   "dependencies": {
     "chalk": "^4.1.0",
-    "lodash.clonedeep": "^4.5.0",
     "ncp": "^2.0.0",
     "process": "^0.11.10",
     "rimraf": "^3.0.2",
@@ -23,6 +22,6 @@
     "np": "^7.2.0"
   },
   "prettier": {
-    "printWidth": 110
+    "printWidth": 90
   }
 }

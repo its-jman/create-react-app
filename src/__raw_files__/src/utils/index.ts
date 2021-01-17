@@ -1,17 +1,20 @@
-// @ts-ignore
-import _buildUrl from "axios/lib/helpers/buildURL";
+import qs, { ParsedUrlQueryInput } from "querystring";
 
-export const buildUrl = _buildUrl;
+export const buildUrl = (url: string, params?: ParsedUrlQueryInput): string => {
+  let out = url;
+  if (params) {
+    const queryString = qs.stringify(params);
+    if (queryString.trim().length > 0) out += "?" + queryString;
+  }
+  return out;
+};
 
 export const parseQueryString = (queryString: string) => {
-  const params = new URLSearchParams(queryString);
-  const entries = [...params.entries()];
+  return qs.parse(queryString.replace("?", ""));
+};
 
-  const mappedObject = entries.map(([k, v]) => ({ [k.replace("[]", "")]: v }));
-  return Object.assign({}, ...mappedObject);
-}
-
-export const exists = (e: any | unknown): boolean => e !== null && e !== undefined && e !== "";
+export const exists = (e: any | unknown): boolean =>
+  e !== null && e !== undefined && e !== "";
 
 export const cloneDeep = <T>(obj: T): T => JSON.parse(JSON.stringify(obj));
 
